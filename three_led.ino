@@ -14,25 +14,30 @@ void setup()
   pinMode(8,OUTPUT);
   pinMode(5,OUTPUT);
   Serial.begin(9600);
+  digitalWrite(l1,HIGH);
+  digitalWrite(l2,HIGH);
+  digitalWrite(l3,HIGH);
 }
 
 void loop()
 {
-  t=millis();
+  //t=0;
+  //int num[3]={0,0,0};
+
   in=Serial.readString();
-  if(!(in[0]>='A'&&in[0]<='Z'))
+  /*if(!(in[0]>='A'&&in[0]<='Z'))
   {
     Serial.println("Incorrect string");
     exit(1);
-  }
-  else
-  {
+  }*/
+  
+  
     for(i=0;in[i]!='\0';i++)
     {
       if(in[i]=='A')
       {
         mul=1;
-        while(in[i]!='B')
+        while(in[i+1]!='B')
         {
           num[0]+=(in[i+1]-48)*mul;
           mul*=10;
@@ -42,7 +47,7 @@ void loop()
       if(in[i]=='B')
       {
         mul=1;
-        while(in[i]!='C')
+        while(in[i+1]!='C')
         {
           num[1]+=(in[i+1]-48)*mul;
           mul*=10;
@@ -52,7 +57,7 @@ void loop()
       if(in[i]=='C')
       {
         mul=1;
-        while(in[i]!='\0')
+        while(in[i+1]!='\0')
         {
           num[2]+=(in[i+1]-48)*mul;
           mul*=10;
@@ -60,19 +65,21 @@ void loop()
         }
       }
     }
-  }
-  digitalWrite(l1,HIGH);
-  digitalWrite(l2,HIGH);
-  digitalWrite(l3,HIGH);
-  if(t==(num[0]*1000))
+  
+  Serial.println(num[0]);
+  Serial.println(num[1]);
+  Serial.println(num[2]);
+  t = millis();
+  Serial.println(t);
+  while(millis() < t + num[0])
   {
     digitalWrite(l1,LOW);
   }
-  if(t==(num[1]*1000))
+  while(millis() < t + num[1])
   {
     digitalWrite(l2,LOW);
   }
-  if(t==(num[2]*1000))
+  while(millis() < t + num[2])
   {
     digitalWrite(l3,LOW);
   }
